@@ -1,0 +1,205 @@
+import SwiftUI
+
+// MARK: - MI.NEWS APP ENTRY
+@main
+struct MiNewsApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
+// MARK: - DATA MODEL
+struct Article: Identifiable {
+    let id = UUID()
+    let category: String
+    let title: String
+    let time: String
+    let imageName: String
+    let color: Color
+}
+
+// MARK: - MAIN VIEW
+struct ContentView: View {
+    @State private var scrollOffset: CGFloat = 0
+    @State private var isLiveActive = false
+    
+    let articles = [
+        Article(category: "ÉCONOMIE", title: "Inflation : Les chiffres records du mois de Mai analysés", time: "2 min", imageName: "chart.line.uptrend.xyaxis", color: .blue),
+        Article(category: "TECH", title: "Apple Vision Pro : Une mise à jour majeure annoncée pour l'automne", time: "15 min", imageName: "visionpro", color: .purple),
+        Article(category: "SANTÉ", title: "Innovation : Une IA capable de détecter les pathologies cardiaques", time: "1h", imageName: "heart.text.square", color: .red),
+        Article(category: "POLITIQUE", title: "Nouveaux enjeux climatiques : Le sommet européen s'ouvre à Bruxelles", time: "3h", imageName: "leaf.fill", color: .green)
+    ]
+
+    var body: some View {
+        ZStack {
+            // Background inspiré d'Apple (Soft Gradients)
+            Color(uiColor: .systemBackground).ignoresSafeArea()
+            
+            LinearGradient(colors: [Color.blue.opacity(0.15), Color.clear], startPoint: .topLeading, endPoint: .bottomTrailing)
+                .ignoresSafeArea()
+
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 25) {
+                    
+                    // HEADER SECTION
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(Date().formatted(.dateTime.day().month().wide()).uppercased())
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .foregroundColor(.secondary)
+                        
+                        HStack {
+                            Text("mi.News")
+                                .font(.system(size: 40, weight: .black, design: .rounded))
+                                .tracking(-1)
+                            
+                            Spacer()
+                            
+                            Button(action: {}) {
+                                Image(systemName: "person.circle.fill")
+                                    .font(.system(size: 30))
+                                    .foregroundStyle(.primary, .quaternary)
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+
+                    // BREAKING NEWS (BFM STYLE)
+                    HStack(spacing: 12) {
+                        Circle()
+                            .fill(.red)
+                            .frame(width: 8, height: 8)
+                            .opacity(isLiveActive ? 1 : 0.3)
+                            .animation(.easeInOut(duration: 0.8).repeatForever(), value: isLiveActive)
+                        
+                        Text("EN DIRECT")
+                            .font(.system(size: 12, weight: .black))
+                            .foregroundColor(.red)
+                        
+                        Text("Exploration spatiale : La capsule est revenue sur Terre")
+                            .font(.system(size: 14, weight: .medium))
+                            .lineLimit(1)
+                    }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(14)
+                    .padding(.horizontal)
+                    .onAppear { isLiveActive = true }
+
+                    // NEWS FEED
+                    VStack(spacing: 24) {
+                        ForEach(articles) { article in
+                            NewsCardView(article: article)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 120) // Espace pour la TabBar
+                }
+            }
+
+            // FLOATING TAB BAR (GLASSMORPHISM)
+            VStack {
+                Spacer()
+                HStack(spacing: 60) {
+                    TabIcon(icon: "house.fill", isSelected: true)
+                    TabIcon(icon: "play.tv", isSelected: false)
+                    TabIcon(icon: "magnifyingglass", isSelected: false)
+                    TabIcon(icon: "bell", isSelected: false)
+                }
+                .padding(.vertical, 20)
+                .padding(.horizontal, 40)
+                .background(.ultraThinMaterial)
+                .clipShape(Capsule())
+                .shadow(color: Color.black.opacity(0.1), radius: 20, y: 10)
+                .overlay(
+                    Capsule()
+                        .stroke(Color.white.opacity(0.2), lineWidth: 0.5)
+                )
+                .padding(.bottom, 20)
+            }
+        }
+    }
+}
+
+// MARK: - NEWS CARD COMPONENT
+struct NewsCardView: View {
+    let article: Article
+    @State private var isHovered = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // Image Placeholder with Glass Overlay
+            ZStack(alignment: .topTrailing) {
+                Rectangle()
+                    .fill(article.color.opacity(0.2))
+                    .frame(height: 220)
+                
+                Image(systemName: article.imageName)
+                    .font(.system(size: 60))
+                    .foregroundStyle(article.color.opacity(0.5))
+                    .frame(maxWidth: .infinity, maxHeight: 220)
+                
+                Text(article.category)
+                    .font(.system(size: 10, weight: .bold))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(8)
+                    .padding(15)
+            }
+            
+            // Content
+            VStack(alignment: .leading, spacing: 8) {
+                Text(article.title)
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                
+                HStack {
+                    Text("mi.News • Il y a \(article.time)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(20)
+            .background(.ultraThinMaterial)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .shadow(color: Color.black.opacity(0.05), radius: 15, y: 10)
+        .scaleEffect(isHovered ? 0.98 : 1.0)
+        .onTapGesture {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                isHovered = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isHovered = false
+                }
+            }
+        }
+    }
+}
+
+// MARK: - TAB ICON HELPER
+struct TabIcon: View {
+    let icon: String
+    let isSelected: Bool
+    
+    var body: some View {
+        Image(systemName: icon)
+            .font(.system(size: 22, weight: .medium))
+            .foregroundStyle(isSelected ? .primary : .secondary)
+    }
+}
+
+// MARK: - PREVIEW
+#Preview {
+    ContentView()
+}
