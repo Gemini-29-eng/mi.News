@@ -3,138 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mi.News | Live</title>
+    <title>mi.News | Plateforme d'Information</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
         :root {
-            --apple-blur: blur(25px) saturate(180%);
-            --apple-glass: rgba(255, 255, 255, 0.4);
+            --apple-glass: rgba(255, 255, 255, 0.7);
+            --bfm-red: #e1001a;
         }
 
         body {
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
-            background: radial-gradient(circle at top right, #dbeafe, #f5f3ff, #ffffff);
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: #f5f5f7;
             color: #1d1d1f;
+            margin: 0;
             overflow-x: hidden;
         }
 
-        /* Effet Glassmorphism */
-        .glass {
+        .glass-header {
             background: var(--apple-glass);
-            backdrop-filter: var(--apple-blur);
-            -webkit-backdrop-filter: var(--apple-blur);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
         }
 
-        /* Animation Point Rouge BFM */
-        .dot-live {
-            animation: pulse 1.2s infinite;
+        /* Animation Menu Burger */
+        .menu-btn {
+            width: 30px;
+            height: 20px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
+        .menu-line {
+            width: 100%;
+            height: 2px;
+            background-color: #1d1d1f;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Animation de défilement (Crawler BFM) */
-        .crawler {
-            display: inline-block;
+        .menu-btn.open .line-1 {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .menu-btn.open .line-2 {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* Menu Overlay Apple Style */
+        #menuOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(30px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 90;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        #menuOverlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Bouton de connexion Apple TV Style */
+        .apple-auth-btn {
+            background: #1d1d1f;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .apple-auth-btn:hover {
+            background: #424245;
+            transform: scale(1.02);
+        }
+
+        /* Crawler BFM */
+        .bfm-crawler {
+            background: #000;
+            color: #fff;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .news-track {
             white-space: nowrap;
-            animation: crawl 25s linear infinite;
+            animation: scroll 30s linear infinite;
         }
 
-        @keyframes crawl {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+        @keyframes scroll {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
         }
 
-        /* Animation tactile Apple */
-        .card-active:active {
-            transform: scale(0.96);
-            transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .card-news {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-news:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Responsivité spécifique */
+        @media (max-width: 768px) {
+            .desktop-nav { display: none; }
         }
     </style>
 </head>
-<body class="pb-32">
+<body class="pt-32">
 
-    <header class="p-6 pt-12 max-w-xl mx-auto">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em]">Vendredi 15 Mai</span>
-        <div class="flex justify-between items-end mt-1">
-            <h1 class="text-4xl font-black tracking-tight">mi.News</h1>
-            <div class="w-10 h-10 glass rounded-full flex items-center justify-center shadow-sm">
-                <span class="text-sm">👤</span>
+    <header class="glass-header">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">
+                    <div class="menu-line line-1"></div>
+                    <div class="menu-line line-2"></div>
+                </div>
+                <h1 class="text-2xl font-black tracking-tighter">mi.News</h1>
             </div>
+
+            <nav class="desktop-nav space-x-8 text-sm font-semibold text-gray-500">
+                <a href="#" class="hover:text-black transition">POLITIQUE</a>
+                <a href="#" class="hover:text-black transition text-red-600">ÉCONOMIE</a>
+                <a href="#" class="hover:text-black transition">SOCIÉTÉ</a>
+                <a href="#" class="hover:text-black transition">TECH</a>
+                <a href="#" class="hover:text-black transition">CULTURE</a>
+            </nav>
+
+            <button class="apple-auth-btn">Se connecter</button>
+        </div>
+
+        <div class="bg-[#e1001a] text-white py-1 text-[11px] font-black px-6">
+            <span class="mr-4">● DIRECT</span>
+            <span class="font-normal opacity-90 italic">Sommet Européen : Les enjeux du climat au coeur des débats.</span>
         </div>
     </header>
 
-    <section class="px-4 mb-8 max-w-xl mx-auto">
-        <div class="glass rounded-2xl h-12 flex items-center overflow-hidden shadow-sm border border-white/50">
-            <div class="bg-red-600 text-white h-full px-4 flex items-center gap-2 z-10 shadow-xl">
-                <div class="w-2 h-2 bg-white rounded-full dot-live"></div>
-                <span class="font-black text-[11px] tracking-tighter">DIRECT</span>
-            </div>
-            <div class="flex-1 overflow-hidden">
-                <p class="crawler text-sm font-semibold tracking-tight">
-                    URGENT : mi.News déploie sa nouvelle interface Glassmorphism • ÉCONOMIE : Le marché réagit positivement aux annonces • TECH : Apple prépare sa conférence...
-                </p>
+    <div id="menuOverlay">
+        <div class="text-center space-y-8">
+            <nav class="flex flex-col space-y-6">
+                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Direct TV</a>
+                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Podcasts d'info</a>
+                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Dernières Éditions</a>
+                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Grandes Enquêtes</a>
+            </nav>
+            <hr class="w-12 mx-auto border-gray-300">
+            <button class="flex items-center gap-2 mx-auto text-gray-500 font-medium hover:text-black">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+                Réglages mi.News
+            </button>
+        </div>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-6 mt-12 grid grid-cols-1 md:grid-cols-12 gap-8">
+        
+        <div class="md:col-span-8">
+            <div class="card-news relative bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
+                <div class="h-[500px] bg-gray-200 overflow-hidden">
+                    <div class="w-full h-full bg-[#1c1c1e] flex items-center justify-center">
+                        <svg width="100" height="100" viewBox="0 0 24 24" fill="white" opacity="0.1"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"></path></svg>
+                    </div>
+                </div>
+                <div class="p-10">
+                    <span class="text-xs font-bold text-red-600 tracking-widest uppercase">Économie Mondiale</span>
+                    <h2 class="text-4xl font-extrabold mt-4 mb-6 leading-tight">Le système monétaire face aux nouvelles régulations numériques.</h2>
+                    <p class="text-gray-500 leading-relaxed text-lg mb-6">Les banques centrales analysent l'impact des monnaies dématérialisées sur la stabilité des marchés européens pour l'horizon 2026.</p>
+                    <div class="flex items-center gap-4 border-t pt-6">
+                        <div class="w-10 h-10 bg-gray-100 rounded-full"></div>
+                        <div>
+                            <p class="text-sm font-bold">Jean de mi.News</p>
+                            <p class="text-xs text-gray-400">Analyste Financier</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
 
-    <main class="px-4 space-y-8 max-w-xl mx-auto">
-        
-        <article class="card-active group">
-            <div class="glass rounded-[38px] p-2 shadow-2xl border border-white/60">
-                <div class="h-56 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-[32px] flex items-center justify-center text-6xl shadow-inner group-hover:rotate-1 transition-transform">
-                    📊
+        <div class="md:col-span-4 space-y-6">
+            <h3 class="text-xl font-bold flex items-center gap-2">
+                Dernières minutes
+            </h3>
+            <div class="space-y-4">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm card-news">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Politique • 14:30</span>
+                    <h4 class="font-bold mt-1">Nouveau projet de loi sur la souveraineté numérique.</h4>
                 </div>
-                <div class="p-6">
-                    <div class="flex gap-2 mb-3">
-                        <span class="text-[10px] font-extrabold bg-blue-100 text-blue-600 px-2 py-1 rounded-md uppercase">Marchés</span>
-                    </div>
-                    <h2 class="text-2xl font-bold leading-tight tracking-tight">
-                        La tech européenne atteint des sommets historiques.
-                    </h2>
-                    <p class="text-gray-500 text-xs mt-3 flex items-center gap-2">
-                        <span class="font-bold text-gray-900">mi.News</span> • Il y a 5 min
-                    </p>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm card-news">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Tech • 14:12</span>
+                    <h4 class="font-bold mt-1">Intelligence Artificielle : Les serveurs mi.Cloud opérationnels.</h4>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm card-news">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Bourse • 13:55</span>
+                    <h4 class="font-bold mt-1">L'euro se stabilise face au dollar après les annonces de la BCE.</h4>
                 </div>
             </div>
-        </article>
-
-        <article class="card-active group">
-            <div class="glass rounded-[38px] p-2 shadow-2xl border border-white/60">
-                <div class="h-56 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-[32px] flex items-center justify-center text-6xl shadow-inner group-hover:-rotate-1 transition-transform">
-                    
-                </div>
-                <div class="p-6">
-                    <div class="flex gap-2 mb-3">
-                        <span class="text-[10px] font-extrabold bg-purple-100 text-purple-600 px-2 py-1 rounded-md uppercase">Innovation</span>
-                    </div>
-                    <h2 class="text-2xl font-bold leading-tight tracking-tight">
-                        Design : Pourquoi le flou "Glass" revient en force.
-                    </h2>
-                    <p class="text-gray-500 text-xs mt-3 flex items-center gap-2">
-                        <span class="font-bold text-gray-900">mi.News</span> • Il y a 42 min
-                    </p>
-                </div>
-            </div>
-        </article>
-
+        </div>
     </main>
 
-    <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[280px] z-50">
-        <div class="glass rounded-full p-4 flex justify-around items-center shadow-2xl border border-white/40">
-            <button class="text-xl">🏠</button>
-            <button class="text-xl opacity-30 hover:opacity-100 transition-opacity">📺</button>
-            <button class="text-xl opacity-30 hover:opacity-100 transition-opacity">🔍</button>
-            <button class="text-xl opacity-30 hover:opacity-100 transition-opacity">🔔</button>
+    <div class="fixed bottom-0 w-full bfm-crawler z-50">
+        <div class="bg-[#0055a4] h-full px-4 flex items-center z-20">INFOS</div>
+        <div class="flex-1 news-track">
+            MI.NEWS : LA NOUVELLE PLATEFORME D'INFORMATION EN TEMPS RÉEL EST DISPONIBLE SUR TOUS VOS ÉCRANS — ÉCONOMIE : LES MARCHÉS REVALORISÉS — POLITIQUE : LE GOUVERNEMENT ANNONCE UNE RÉFORME — 
         </div>
-    </nav>
+    </div>
 
+    <script>
+        function toggleMenu() {
+            const btn = document.getElementById('menuBtn');
+            const overlay = document.getElementById('menuOverlay');
+            
+            btn.classList.toggle('open');
+            
+            if(btn.classList.contains('open')) {
+                overlay.style.display = 'flex';
+                setTimeout(() => overlay.classList.add('active'), 10);
+                document.body.style.overflow = 'hidden'; // Empêche le scroll
+            } else {
+                overlay.classList.remove('active');
+                setTimeout(() => overlay.style.display = 'none', 400);
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
 </body>
 </html>
