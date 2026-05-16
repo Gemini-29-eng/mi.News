@@ -169,4 +169,366 @@
             font-weight: 700;
             padding: 16px 60px;
             border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.0
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .btn-continue span { color: var(--accent-blue); }
+
+
+        /* --- NOUVEL ÉCRAN : PLATEFORME PRINCIPALE --- */
+        #main-platform {
+            display: none; /* Masqué par défaut */
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        /* Barre de navigation */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 40px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #fff;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .burger-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .burger-menu span {
+            width: 30px;
+            height: 30px;
+            border-top: 3px solid black;
+        }
+        /* Ajustement rapide des lignes du burger */
+        .burger-menu { width: 28px; height: 18px; position: relative; }
+        .burger-menu::before, .burger-menu::after { content: ''; width: 100%; height: 3px; background: black; position: absolute; }
+        .burger-menu::before { top: 0; }
+        .burger-menu::after { bottom: 0; }
+
+        .navbar .logo-main { font-size: 2rem; }
+        .navbar .logo-mi::after { bottom: 4px; width: 8px; height: 4px; }
+        .navbar .logo-arrow { border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 13px solid var(--accent-green); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 5px;
+        }
+
+        .login-btn {
+            background-color: var(--grey-light);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Menu des catégories */
+        .categories-bar {
+            display: flex;
+            gap: 15px;
+            padding: 12px 40px;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            white-space: nowrap;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .categories-bar a {
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .categories-bar .active {
+            color: var(--accent-blue);
+        }
+
+        /* Bandeaux d'information */
+        .info-banners {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+        }
+
+        .badge-languages {
+            background-color: #632314;
+            color: #f7a072;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .app-download {
+            background-color: var(--grey-light);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        /* Zone de contenu principale */
+        .news-feed {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .feed-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .feed-grid {
+            display: flex;
+            gap: 40px;
+            position: relative;
+        }
+
+        /* Séparateur vertical central */
+        .separator {
+            width: 2px;
+            background-color: #000000;
+            align-self: stretch;
+        }
+
+        /* Colonnes et articles */
+        .column-main { flex: 1.6; }
+        .column-side { flex: 1; }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .section-subtitle span { color: var(--accent-blue); }
+
+        .article-card {
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            padding: 25px;
+            border: 1px solid #f0f0f2;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            border-radius: 30px;
+            overflow: hidden;
+            background-color: #eaeaea;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        /* Imitation des visuels de la maquette */
+        .img-placeholder {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        .source-tag {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            color: #ffffff;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+        .source-tag span { color: var(--accent-blue); }
+
+        .article-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        /* Ajustements spécifiques à la colonne latérale */
+        .column-side .article-card {
+            border-radius: 35px;
+            padding: 20px;
+        }
+        .column-side .article-title {
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .feed-grid { flex-direction: column; }
+            .separator { display: none; }
+            .info-banners { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .navbar { padding: 15px 20px; }
+            .categories-bar { padding: 12px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div class="container">
+            <header class="logo-container">
+                <div class="logo-main">
+                    <span class="logo-mi">mi</span>
+                    <span class="logo-news">News</span>
+                    <div class="logo-arrow"></div>
+                </div>
+                <p class="logo-subtitle">
+                    L'actualité, pour vous.<br>
+                    <span>mini</span>, simple rapide !
+                </p>
+            </header>
+
+            <main class="card">
+                <h1 class="wwdc-title">
+                    <span class="wwdc-grey">WW</span><span class="wwdc-white">DC</span><span class="wwdc-glow">26</span>
+                </h1>
+                <p class="card-headline">
+                    Une semaine placée sous le signe de la technologie, de la créativité et de la communauté.
+                </p>
+                <p class="card-details">
+                    Du 8 au 12 juin 2026. Tout se déroule en ligne et c'est gratuit.
+                </p>
+            </main>
+
+            <footer>
+                <button class="btn-continue" onclick="goToPlatform()">
+                    Continuer <span>sur mi.News</span>
+                </button>
+            </footer>
+        </div>
+    </div>
+
+
+    <div id="main-platform">
+        
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="burger-menu"></div>
+                <div class="logo-main">
+                    <span class="logo-mi">mi</span>
+                    <span class="logo-news">News</span>
+                    <div class="logo-arrow"></div>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="search-btn">🔍</button>
+                <button class="login-btn">Se Connecter</button>
+            </div>
+        </nav>
+
+        <div class="categories-bar">
+            <a href="#" class="active">Sujet du moment &gt;</a>
+            <a href="#">International</a>
+            <a href="#">National + Local</a>
+            <a href="#">Politique</a>
+            <a href="#">Police + Justice</a>
+            <a href="#">Société</a>
+            <a href="#">Economie</a>
+            <a href="#">Tech</a>
+            <a href="#">Sport</a>
+            <a href="#">Culture</a>
+            <a href="#">Météo</a>
+        </div>
+
+        <div class="info-banners">
+            <div class="badge-languages">Disponible dès maintenant en anglais, allemand et latin.</div>
+            <a href="#" class="app-download">Télécharger l'application &gt;</a>
+        </div>
+
+        <main class="news-feed">
+            <h2 class="feed-title">Sujet du moment : 📈</h2>
+            
+            <div class="feed-grid">
+                
+                <section class="column-main">
+                    <h3 class="section-subtitle">Guerre au <span>Moyen-Orient</span> :</h3>
+                    <article class="article-card">
+                        <div class="image-wrapper">
+                            <img class="img-placeholder" src="https://images.unsplash.com/photo-1580130281326-9a11d1348c5a?auto=format&fit=crop&w=800&q=80" alt="Trump">
+                            <div class="source-tag">Image <span>Le Monde</span></div>
+                        </div>
+                        <h4 class="article-title">
+                            Trump menace : "L'Iran passera un très mauvais moment si un accord n'est pas conclu".
+                        </h4>
+                    </article>
+                </section>
+
+                <div class="separator"></div>
+
+                <section class="column-side">
+                    <h3 class="section-subtitle">Affaire <span>Bruel</span> :</h3>
+                    <article class="article-card">
+                        <div class="image-wrapper">
+                            <img class="img-placeholder" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Affaire Bruel">
+                            <div class="source-tag">Image <span>Facebook</span></div>
+                        </div>
+                        <h4 class="article-title">
+                            Affaire Bruel : Flavie Flament porte plainte, près de 35 ans après... violée à 16 ans par Bruel.
+                        </h4>
+                    </article>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function goToPlatform() {
+            const welcome = document.getElementById('welcome-screen');
+            const platform = document.getElementById('main-platform');
+            
+            // Disparition en douceur de l'accueil
+            welcome.style.display = 'none';
+            
+            // Affichage de la plateforme d'actualités
+            platform.style.display = 'block';
+            setTimeout(() => {
+                platform.style.opacity = '1';
+            }, 50);
+        }
+    </script>
+</body>
+</html>
