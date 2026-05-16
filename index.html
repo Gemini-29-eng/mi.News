@@ -3,251 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mi.News | Plateforme d'Information</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>mi.News - WWDC26</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-
         :root {
-            --apple-glass: rgba(255, 255, 255, 0.7);
-            --bfm-red: #e1001a;
+            --bg-color: #ffffff;
+            --text-dark: #000000;
+            --text-light: #ffffff;
+            --accent-green: #3cd01e;
+            --accent-blue: #2300ff;
+            --card-bg: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: #f5f5f7;
-            color: #1d1d1f;
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        .glass-header {
-            background: var(--apple-glass);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-        }
-
-        /* Animation Menu Burger */
-        .menu-btn {
-            width: 30px;
-            height: 20px;
-            position: relative;
-            cursor: pointer;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .menu-line {
-            width: 100%;
-            height: 2px;
-            background-color: #1d1d1f;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .menu-btn.open .line-1 {
-            transform: translateY(9px) rotate(45deg);
-        }
-
-        .menu-btn.open .line-2 {
-            transform: translateY(-9px) rotate(-45deg);
-        }
-
-        /* Menu Overlay Apple Style */
-        #menuOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(30px);
-            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 90;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        #menuOverlay.active {
+        .container {
+            width: 100%;
+            max-width: 750px;
+            text-align: center;
             display: flex;
-            opacity: 1;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
         }
 
-        /* Bouton de connexion Apple TV Style */
-        .apple-auth-btn {
-            background: #1d1d1f;
-            color: white;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
+        /* --- LOGO MI.NEWS --- */
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .apple-auth-btn:hover {
-            background: #424245;
-            transform: scale(1.02);
-        }
-
-        /* Crawler BFM */
-        .bfm-crawler {
-            background: #000;
-            color: #fff;
-            height: 40px;
+        .logo-main {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
             display: flex;
             align-items: center;
-            font-size: 13px;
+            line-height: 1;
+        }
+
+        .logo-mi {
+            color: var(--text-dark);
+            position: relative;
+        }
+
+        .logo-mi::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 54%;
+            width: 12px;
+            height: 6px;
+            background-color: #f7e300;
+        }
+
+        .logo-news {
+            color: var(--text-dark);
+            position: relative;
+            margin-left: 2px;
+        }
+
+        .logo-arrow {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 22px solid var(--accent-green);
+            margin-left: 5px;
+            display: inline-block;
+            transform: translateY(2px);
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
             font-weight: 700;
-            text-transform: uppercase;
+            margin-top: 5px;
+            line-height: 1.3;
         }
 
-        .news-track {
-            white-space: nowrap;
-            animation: scroll 30s linear infinite;
+        .logo-subtitle span {
+            text-decoration: underline;
         }
 
-        @keyframes scroll {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
+        /* --- CARTE PRINCIPALE --- */
+        .card {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border-radius: 60px;
+            padding: 60px 40px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .card-news {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .wwdc-title {
+            font-size: 5rem;
+            font-weight: 700;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .card-news:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        .wwdc-grey {
+            background: linear-gradient(180deg, #555 0%, #222 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Responsivité spécifique */
-        @media (max-width: 768px) {
-            .desktop-nav { display: none; }
+        .wwdc-white {
+            color: #d1d1d6;
+        }
+
+        .wwdc-glow {
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px rgba(255,255,255,0.8),
+                0 0 20px rgba(255,255,255,0.4),
+                0 0 30px rgba(247, 227, 0, 0.3);
+            font-weight: 800;
+        }
+
+        .card-headline {
+            font-size: 1.5rem;
+            font-weight: 600;
+            max-width: 500px;
+            margin: 0 auto 15px auto;
+            line-height: 1.3;
+        }
+
+        .card-details {
+            font-size: 0.9rem;
+            color: #a1a1a6;
+            font-weight: 400;
+        }
+
+        /* --- BOUTON DE NAVIGATION --- */
+        .btn-continue {
+            display: inline-block;
+            background-color: #ffffff;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 700;
+            padding: 16px 60px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #e5e5ea;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .btn-continue span {
+            color: var(--accent-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .wwdc-title { font-size: 3.5rem; }
+            .card-headline { font-size: 1.2rem; }
+            .card { border-radius: 40px; padding: 40px 20px; }
+            .btn-continue { width: 100%; padding: 16px 20px; font-size: 1.1rem; }
         }
     </style>
 </head>
-<body class="pt-32">
+<body>
 
-    <header class="glass-header">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
-            <div class="flex items-center gap-6">
-                <div class="menu-btn" id="menuBtn" onclick="toggleMenu()">
-                    <div class="menu-line line-1"></div>
-                    <div class="menu-line line-2"></div>
-                </div>
-                <h1 class="text-2xl font-black tracking-tighter">mi.News</h1>
+    <div class="container">
+        <header class="logo-container">
+            <div class="logo-main">
+                <span class="logo-mi">mi</span>
+                <span class="logo-news">News</span>
+                <div class="logo-arrow"></div>
             </div>
+            <p class="logo-subtitle">
+                L'actualité, pour vous.<br>
+                <span>mini</span>, simple rapide !
+            </p>
+        </header>
 
-            <nav class="desktop-nav space-x-8 text-sm font-semibold text-gray-500">
-                <a href="#" class="hover:text-black transition">POLITIQUE</a>
-                <a href="#" class="hover:text-black transition text-red-600">ÉCONOMIE</a>
-                <a href="#" class="hover:text-black transition">SOCIÉTÉ</a>
-                <a href="#" class="hover:text-black transition">TECH</a>
-                <a href="#" class="hover:text-black transition">CULTURE</a>
-            </nav>
+        <main class="card">
+            <h1 class="wwdc-title">
+                <span class="wwdc-grey">WW</span><span class="wwdc-white">DC</span><span class="wwdc-glow">26</span>
+            </h1>
+            <p class="card-headline">
+                Une semaine placée sous le signe de la technologie, de la créativité et de la communauté.
+            </p>
+            <p class="card-details">
+                Du 8 au 12 juin 2026. Tout se déroule en ligne et c'est gratuit.
+            </p>
+        </main>
 
-            <button class="apple-auth-btn">Se connecter</button>
-        </div>
-
-        <div class="bg-[#e1001a] text-white py-1 text-[11px] font-black px-6">
-            <span class="mr-4">● DIRECT</span>
-            <span class="font-normal opacity-90 italic">Sommet Européen : Les enjeux du climat au coeur des débats.</span>
-        </div>
-    </header>
-
-    <div id="menuOverlay">
-        <div class="text-center space-y-8">
-            <nav class="flex flex-col space-y-6">
-                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Direct TV</a>
-                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Podcasts d'info</a>
-                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Dernières Éditions</a>
-                <a href="#" class="text-4xl font-bold hover:opacity-50 transition">Grandes Enquêtes</a>
-            </nav>
-            <hr class="w-12 mx-auto border-gray-300">
-            <button class="flex items-center gap-2 mx-auto text-gray-500 font-medium hover:text-black">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"></path><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
-                Réglages mi.News
-            </button>
-        </div>
+        <footer>
+            <a href="#" class="btn-continue">
+                Continuer <span>sur mi.News</span>
+            </a>
+        </footer>
     </div>
 
-    <main class="max-w-7xl mx-auto px-6 mt-12 grid grid-cols-1 md:grid-cols-12 gap-8">
-        
-        <div class="md:col-span-8">
-            <div class="card-news relative bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
-                <div class="h-[500px] bg-gray-200 overflow-hidden">
-                    <div class="w-full h-full bg-[#1c1c1e] flex items-center justify-center">
-                        <svg width="100" height="100" viewBox="0 0 24 24" fill="white" opacity="0.1"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"></path></svg>
-                    </div>
-                </div>
-                <div class="p-10">
-                    <span class="text-xs font-bold text-red-600 tracking-widest uppercase">Économie Mondiale</span>
-                    <h2 class="text-4xl font-extrabold mt-4 mb-6 leading-tight">Le système monétaire face aux nouvelles régulations numériques.</h2>
-                    <p class="text-gray-500 leading-relaxed text-lg mb-6">Les banques centrales analysent l'impact des monnaies dématérialisées sur la stabilité des marchés européens pour l'horizon 2026.</p>
-                    <div class="flex items-center gap-4 border-t pt-6">
-                        <div class="w-10 h-10 bg-gray-100 rounded-full"></div>
-                        <div>
-                            <p class="text-sm font-bold">Jean de mi.News</p>
-                            <p class="text-xs text-gray-400">Analyste Financier</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="md:col-span-4 space-y-6">
-            <h3 class="text-xl font-bold flex items-center gap-2">
-                Dernières minutes
-            </h3>
-            <div class="space-y-4">
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm card-news">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase">Politique • 14:30</span>
-                    <h4 class="font-bold mt-1">Nouveau projet de loi sur la souveraineté numérique.</h4>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm card-news">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase">Tech • 14:12</span>
-                    <h4 class="font-bold mt-1">Intelligence Artificielle : Les serveurs mi.Cloud opérationnels.</h4>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm card-news">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase">Bourse • 13:55</span>
-                    <h4 class="font-bold mt-1">L'euro se stabilise face au dollar après les annonces de la BCE.</h4>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div class="fixed bottom-0 w-full bfm-crawler z-50">
-        <div class="bg-[#0055a4] h-full px-4 flex items-center z-20">INFOS</div>
-        <div class="flex-1 news-track">
-            MI.NEWS : LA NOUVELLE PLATEFORME D'INFORMATION EN TEMPS RÉEL EST DISPONIBLE SUR TOUS VOS ÉCRANS — ÉCONOMIE : LES MARCHÉS REVALORISÉS — POLITIQUE : LE GOUVERNEMENT ANNONCE UNE RÉFORME — 
-        </div>
-    </div>
-
-    <script>
-        function toggleMenu() {
-            const btn = document.getElementById('menuBtn');
-            const overlay = document.getElementById('menuOverlay');
-            
-            btn.classList.toggle('open');
-            
-            if(btn.classList.contains('open')) {
-                overlay.style.display = 'flex';
-                setTimeout(() => overlay.classList.add('active'), 10);
-                document.body.style.overflow = 'hidden'; // Empêche le scroll
-            } else {
-                overlay.classList.remove('active');
-                setTimeout(() => overlay.style.display = 'none', 400);
-                document.body.style.overflow = 'auto';
-            }
-        }
-    </script>
 </body>
 </html>
